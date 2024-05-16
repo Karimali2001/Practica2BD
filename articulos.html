@@ -24,6 +24,8 @@
                 <th>Minimo</th>
                 <th>StatusA</th>
                 <th>FechaDesincorporacion</th>
+                <th>Acciones</th>
+
             </tr>
         </thead>
         <tbody id="tableBody">
@@ -32,64 +34,119 @@
 
 
     <!-- Modal crear articulo-->
-<!-- Modal -->
-<div class="modal fade" id="addArticleModal" tabindex="-1" role="dialog" aria-labelledby="addArticleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addArticleModalLabel">Agregar nuevo artículo</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <!-- Modal -->
+    <div class="modal fade" id="addArticleModal" tabindex="-1" role="dialog" aria-labelledby="addArticleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addArticleModalLabel">Agregar nuevo artículo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addArticleForm">
+                        <div class="form-group">
+                            <label for="CodArticulo">Código de artículo</label>
+                            <input type="text" class="form-control" id="CodArticulo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Descripcion">Descripción</label>
+                            <input type="text" class="form-control" id="Descripcion" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="CodLinea">Código de línea</label>
+                            <input type="number" class="form-control" id="CodLinea" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Precio">Precio</label>
+                            <input type="number" step="0.01" class="form-control" id="Precio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Existencia">Existencia</label>
+                            <input type="number" class="form-control" id="Existencia" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Maximo">Máximo</label>
+                            <input type="number" class="form-control" id="Maximo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Minimo">Mínimo</label>
+                            <input type="number" class="form-control" id="Minimo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="StatusA">Estado</label>
+                            <select class="form-control" id="StatusA" required>
+                                <option value="A">A</option>
+                                <option value="D">D</option>
+                                <option value="R">R</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="FechaDesincorporacion">Fecha de desincorporación</label>
+                            <input type="date" class="form-control" id="FechaDesincorporacion">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <form id="addArticleForm">
-            <div class="form-group">
-              <label for="CodArticulo">Código de artículo</label>
-              <input type="text" class="form-control" id="CodArticulo" required>
-            </div>
-            <div class="form-group">
-              <label for="Descripcion">Descripción</label>
-              <input type="text" class="form-control" id="Descripcion" required>
-            </div>
-            <div class="form-group">
-              <label for="CodLinea">Código de línea</label>
-              <input type="number" class="form-control" id="CodLinea" required>
-            </div>
-            <div class="form-group">
-              <label for="Precio">Precio</label>
-              <input type="number" step="0.01" class="form-control" id="Precio" required>
-            </div>
-            <div class="form-group">
-              <label for="Existencia">Existencia</label>
-              <input type="number" class="form-control" id="Existencia" required>
-            </div>
-            <div class="form-group">
-              <label for="Maximo">Máximo</label>
-              <input type="number" class="form-control" id="Maximo" required>
-            </div>
-            <div class="form-group">
-              <label for="Minimo">Mínimo</label>
-              <input type="number" class="form-control" id="Minimo" required>
-            </div>
-            <div class="form-group">
-              <label for="StatusA">Estado</label>
-              <select class="form-control" id="StatusA" required>
-                <option value="A">A</option>
-                <option value="D">D</option>
-                <option value="R">R</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="FechaDesincorporacion">Fecha de desincorporación</label>
-              <input type="date" class="form-control" id="FechaDesincorporacion">
-            </div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-          </form>
-        </div>
-      </div>
     </div>
-  </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Editar Articulo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="CodArticulo">CodArticulo</label>
+                            <input readonly type="text" class="form-control" id="CodArticulo" placeholder="Enter CodArticulo">
+                        </div>
+                        <div class="form-group">
+                            <label for="Descripcion">Descripcion</label>
+                            <input type="text" class="form-control" id="Descripcion" placeholder="Enter Descripcion">
+                        </div>
+                        <div class="form-group">
+                            <label for="Precio">Precio</label>
+                            <input type="number" class="form-control" id="Precio" placeholder="Enter Precio">
+                        </div>
+                        <div class="form-group">
+                            <label for="Existencia">Existencia</label>
+                            <input type="number" class="form-control" id="Existencia" placeholder="Enter Existencia">
+                        </div>
+                        <div class="form-group">
+                            <label for="Maximo">Maximo</label>
+                            <input type="number" class="form-control" id="Maximo" placeholder="Enter Maximo">
+                        </div>
+                        <div class="form-group">
+                            <label for="Minimo">Minimo</label>
+                            <input type="number" class="form-control" id="Minimo" placeholder="Enter Minimo">
+                        </div>
+                        <div class="form-group">
+                            <label for="StatusA">StatusA</label>
+                            <input type="text" class="form-control" id="StatusA" placeholder="Enter StatusA">
+                        </div>
+                        <div class="form-group">
+                            <label for="FechaDesincorporacion">FechaDesincorporacion</label>
+                            <input type="date" class="form-control" id="FechaDesincorporacion" placeholder="Enter FechaDesincorporacion">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="saveButton">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -108,11 +165,18 @@
             fetch(`http://localhost:8000/getarticulos/${id}`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data);
                     data.forEach(item => {
+                        let fechaDesincorporacion = item.FechaDesincorporacion instanceof Object ? item.FechaDesincorporacion.date : item.FechaDesincorporacion;
+                        if (fechaDesincorporacion) {
+                            fechaDesincorporacion = fechaDesincorporacion.split(' ')[0];
+                        }
                         const row = document.createElement('tr');
                         row.innerHTML = `<td>${item.CodArticulo}</td><td>${item.Descripcion}</td><td>${item.Precio}</td>
                                          <td>${item.Existencia}</td><td>${item.Maximo}</td><td>${item.Minimo}</td>
-                                         <td>${item.StatusA}</td><td>${item.FechaDesincorporacion}</td>`;
+                                         <td>${item.StatusA}</td><td>${fechaDesincorporacion}</td>
+                                         <td><button class="btn btn-primary edit-button">Editar</button>
+                                         <button class="btn btn-danger delete-button" data-codarticulo="${item.CodArticulo}">Eliminar</button></td>`;
                         tableBody.appendChild(row);
                     });
                 })
@@ -127,53 +191,135 @@
     <script>
         //*****************Crear un articulo
         document.addEventListener('DOMContentLoaded', (event) => {
-    document.getElementById('createButton').addEventListener('click', function () {
-        $('#addArticleModal').modal('show');
-    });
-
-    document.getElementById('addArticleForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        let CodArticulo = document.getElementById('CodArticulo').value;
-        let Descripcion = document.getElementById('Descripcion').value;
-        let CodLinea = document.getElementById('CodLinea').value;
-        let Precio = document.getElementById('Precio').value;
-        let Existencia = document.getElementById('Existencia').value;
-        let Maximo = document.getElementById('Maximo').value;
-        let Minimo = document.getElementById('Minimo').value;
-        let StatusA = document.getElementById('StatusA').value;
-        let FechaDesincorporacion = document.getElementById('FechaDesincorporacion').value;
-
-        let data = {
-            CodArticulo: CodArticulo,
-            Descripcion: Descripcion,
-            CodLinea: CodLinea,
-            Precio: Precio,
-            Existencia: Existencia,
-            Maximo: Maximo,
-            Minimo: Minimo,
-            StatusA: StatusA,
-            FechaDesincorporacion: FechaDesincorporacion
-        };
-
-        fetch('http://localhost:8000/postarticulo', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                $('#addArticleModal').modal('hide');
-                updateTable();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+            document.getElementById('createButton').addEventListener('click', function () {
+                $('#addArticleModal').modal('show');
             });
+
+            document.getElementById('addArticleForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                let CodArticulo = document.getElementById('CodArticulo').value;
+                let Descripcion = document.getElementById('Descripcion').value;
+                let CodLinea = document.getElementById('CodLinea').value;
+                let Precio = document.getElementById('Precio').value;
+                let Existencia = document.getElementById('Existencia').value;
+                let Maximo = document.getElementById('Maximo').value;
+                let Minimo = document.getElementById('Minimo').value;
+                let StatusA = document.getElementById('StatusA').value;
+                let FechaDesincorporacion = document.getElementById('FechaDesincorporacion').value;
+
+                let data = {
+                    CodArticulo: CodArticulo,
+                    Descripcion: Descripcion,
+                    CodLinea: CodLinea,
+                    Precio: Precio,
+                    Existencia: Existencia,
+                    Maximo: Maximo,
+                    Minimo: Minimo,
+                    StatusA: StatusA,
+                    FechaDesincorporacion: FechaDesincorporacion
+                };
+                $.ajax({
+                    url: 'http://localhost:8000/postarticulo',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        // Handle the response here
+                        console.log('Success:', data);
+                        $('#addArticleModal').modal('hide');
+                        updateTable();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error: ' + textStatus + ' ' + errorThrown);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        //*****************GEt lineas
+        $(document).ready(function() {
+    $.ajax({
+        url: 'http://localhost:8000/getlineas',
+        type: 'GET',
+        success: function(data) {
+            const select = $('#CodLinea');
+            data.forEach(item => {
+                select.append(new Option(item.Descripcion, item.CodLinea));
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error: ' + textStatus + ' ' + errorThrown);
+        }
     });
 });
+    </script>
+
+    <script>
+        //*****************Eliminar un articulo
+        $(document).on('click', '.delete-button', function () {
+            var CodArticulo = $(this).data('codarticulo');
+            console.log(CodArticulo);
+            $.ajax({
+                url: 'http://localhost:8000/deletearticulo',
+                method: 'DELETE',
+                data: JSON.stringify({ CodArticulo: CodArticulo }),
+                contentType: 'application/json',
+                success: function () {
+                    alert('Articulo eliminado con éxito');
+                    // Update the table
+                    updateTable();
+                },
+                error: function () {
+                    alert('Error al eliminar el articulo');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        //*****************Editar un articulo
+        // Open the edit modal when the edit button is clicked
+        $(document).on('click', '.edit-button', function () {
+            var CodArticulo = $(this).closest('tr').find('td:first').text();
+            var Descripcion = $(this).closest('tr').find('td:nth-child(2)').text();
+            // Add other fields as necessary
+
+            // Fill the modal with the article data
+            $('#editModal #CodArticulo').val(CodArticulo);
+            $('#editModal #Descripcion').val(Descripcion);
+            // Add other fields as necessary
+
+            // Show the modal
+            $('#editModal').modal('show');
+        });
+
+        // Send the update request when the save button in the modal is clicked
+        $('#editModal #saveButton').click(function () {
+            var CodArticulo = $('#editModal #CodArticulo').val();
+            var Descripcion = $('#editModal #Descripcion').val();
+            // Add other fields as necessary
+
+            $.ajax({
+                url: 'http://localhost:8000/updatearticulo',
+                method: 'PUT',
+                data: JSON.stringify({ CodArticulo: CodArticulo, Descripcion: Descripcion }),
+                // Add other fields as necessary
+                contentType: 'application/json',
+                success: function () {
+                    alert('Articulo actualizado con éxito');
+                    // Update the table
+                    updateTable();
+                    // Close the modal
+                    $('#editModal').modal('hide');
+                },
+                error: function () {
+                    alert('Error al actualizar el articulo');
+                }
+            });
+        });
     </script>
 </body>
 

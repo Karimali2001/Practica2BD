@@ -54,8 +54,8 @@ $routes = [
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-          // Log the input
-    error_log(print_r($input, true));
+        // Log the input
+        error_log(print_r($input, true));
 
         if (!isset ($input['CodLinea'], $input['DescripcionL'])) {
             http_response_code(400);
@@ -155,8 +155,11 @@ $routes = [
     '/postarticulo' => function () use ($conn) {
         $data = json_decode(file_get_contents('php://input'), true);
 
-        $tsql = "INSERT INTO Articulos (CodLinea, NombreArticulo, Precio) VALUES (?, ?, ?)";
-        $params = [$data['CodLinea'], $data['NombreArticulo'], $data['Precio']];
+        // Log the data to the error log
+        error_log(print_r($data, true));
+
+        $tsql = "INSERT INTO Articulos (CodArticulo, Descripcion, CodLinea, Precio, Existencia, Maximo, Minimo, StatusA, FechaDesincorporacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $params = [$data['CodArticulo'], $data['Descripcion'], $data['CodLinea'], $data['Precio'], $data['Existencia'], $data['Maximo'], $data['Minimo'], $data['StatusA'], $data['FechaDesincorporacion']];
         $getResults = sqlsrv_query($conn, $tsql, $params);
 
         if ($getResults == FALSE) {
@@ -169,7 +172,13 @@ $routes = [
     },
 
     // DELETE method to delete an article
-    '/deletearticulo/{CodArticulo}' => function ($CodArticulo) use ($conn) {
+    '/deletearticulo' => function () use ($conn) {
+        $request = json_decode(file_get_contents('php://input'), true);
+        $CodArticulo = $request['CodArticulo'];
+
+        // Log the received CodArticulo
+        error_log("Received CodArticulo: " . $CodArticulo);
+
         $tsql = "DELETE FROM Articulos WHERE CodArticulo = ?";
         $params = [$CodArticulo];
         $getResults = sqlsrv_query($conn, $tsql, $params);
@@ -183,12 +192,15 @@ $routes = [
         echo json_encode(['message' => 'Articulo deleted successfully']);
     },
 
-    // UPDATE method to update an article
-    '/updatearticulo/{CodArticulo}' => function ($CodArticulo) use ($conn) {
-        $data = json_decode(file_get_contents('php://input'), true);
-
-        $tsql = "UPDATE Articulos SET CodLinea = ?, NombreArticulo = ?, Precio = ? WHERE CodArticulo = ?";
-        $params = [$data['CodLinea'], $data['NombreArticulo'], $data['Precio'], $CodArticulo];
+    // PUT method to update an article
+    '/updatearticulo' => function () use ($conn) {
+        $request = json_decode(file_get_contents('php://input'), true);
+        $CodArticulo = $request['CodArticulo'];
+        $Descripcion = $request['Descripcion'];
+        // Add other fields as necessary
+    
+        $tsql = "UPDATE Articulos SET Descripcion = ? WHERE CodArticulo = ?";
+        $params = [$Descripcion, $CodArticulo];
         $getResults = sqlsrv_query($conn, $tsql, $params);
 
         if ($getResults == FALSE) {
