@@ -54,6 +54,9 @@ $routes = [
 
         $input = json_decode(file_get_contents('php://input'), true);
 
+          // Log the input
+    error_log(print_r($input, true));
+
         if (!isset ($input['CodLinea'], $input['DescripcionL'])) {
             http_response_code(400);
             die ('Bad Request');

@@ -10,10 +10,10 @@
     <h1 class="text-center">Lineas de Productos</h1>
 
     <!-- Botón para abrir el modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#lineaModal">
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#lineaModal">
         Crear
     </button>
-<a href="articulos.html" class="btn btn-primary">fkdjal</a>
+
 
     <!-- Tabla para las lineas -->
     <table class="table text-center">
@@ -83,7 +83,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" id="saveButton">Guardar cambios</button>
+                    <button type="button" class="btn btn-primary" id="editSaveButton">Guardar cambios</button>
                 </div>
             </div>
         </div>
@@ -96,43 +96,37 @@
 
     <script>
         function updateTable() {
+            // Limpiar la tabla
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+    
+            //*****************GET LINEAS
             fetch('http://localhost:8000/getlineas')
                 .then(response => response.json())
                 .then(data => {
-                    const tableBody = document.getElementById('tableBody');
-                    // Clear the table body
-                    tableBody.innerHTML = '';
                     data.forEach(item => {
                         const row = document.createElement('tr');
                         row.innerHTML = `<td>${item.CodLinea}</td><td>${item.DescripcionL}</td>
                                          <td>
-                                             <button class="btn btn-danger deleteButton" data-codlinea="${item.CodLinea}">Eliminar</button>
-                                             <button class="btn btn-primary editButton" data-codlinea="${item.CodLinea}">Editar</button>
+                                            <button class="btn btn-danger deleteButton" data-codlinea="${item.CodLinea}">Eliminar</button>
+                                            <button class="btn btn-primary editButton" data-codlinea="${item.CodLinea}">Editar</button>
+                                            <a href="articulos.html?id=${item.CodLinea}" class="btn btn-success selectButton">Seleccionar</a>
                                          </td>`;
                         tableBody.appendChild(row);
                     });
                 })
                 .catch(error => console.error('Error:', error));
         }
-
+    
         document.addEventListener('DOMContentLoaded', (event) => {
             updateTable();
         });
-    </script>
-    <script>
-        //*****************GET LINEAS
-        fetch('http://localhost:8000/getlineas')
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.getElementById('tableBody');
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td>${item.CodLinea}</td><td>${item.DescripcionL}</td>
-                                     <td><button class="btn btn-danger deleteButton" data-codlinea="${item.CodLinea}">Eliminar</button></td>`;
-                    tableBody.appendChild(row);
-                });
-            })
-            .catch(error => console.error('Error:', error));
+    
+        // Event listener for select button
+        $(document).on('click', '.selectButton', function () {
+            var CodLinea = $(this).data('codlinea');
+            console.log(CodLinea);
+        });
     </script>
 
     <script>
@@ -149,7 +143,7 @@
                 success: function () {
                     alert('Linea creada con éxito');
                     $('#lineaModal').modal('hide');
-                    location.reload();
+                    updateTable();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     // Si la inserción falla, muestra un mensaje de error
@@ -188,7 +182,7 @@
             $('#editModal').modal('show');
         });
 
-        $(document).on('click', '#saveButton', function () {
+        $(document).on('click', '#editSaveButton', function () {
             var newDescripcionL = $('#editDescripcionL').val();
             var CodLinea = $('.editButton').data('codlinea');
 
@@ -198,7 +192,6 @@
                 data: JSON.stringify({ CodLinea: CodLinea, DescripcionL: newDescripcionL }),
                 contentType: 'application/json',
                 success: function () {
-                    alert('Linea actualizada con éxito');
                     // Update the table
                     updateTable();
                     // Close the modal
