@@ -22,6 +22,7 @@
                 <th>Existencia</th>
                 <th>Maximo</th>
                 <th>Minimo</th>
+                <th>Cod Linea</th>
                 <th>StatusA</th>
                 <th>FechaDesincorporacion</th>
                 <th>Acciones</th>
@@ -95,7 +96,8 @@
     </div>
 
     <!-- Edit Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -108,7 +110,8 @@
                     <form>
                         <div class="form-group">
                             <label for="CodArticulo">CodArticulo</label>
-                            <input readonly type="text" class="form-control" id="CodArticulo" placeholder="Enter CodArticulo">
+                            <input readonly type="text" class="form-control" id="CodArticulo"
+                                placeholder="Enter CodArticulo">
                         </div>
                         <div class="form-group">
                             <label for="Descripcion">Descripcion</label>
@@ -138,7 +141,8 @@
                         </select>
                         <div class="form-group">
                             <label for="FechaDesincorporacion">FechaDesincorporacion</label>
-                            <input type="date" class="form-control" id="FechaDesincorporacion" placeholder="Enter FechaDesincorporacion">
+                            <input type="date" class="form-control" id="FechaDesincorporacion"
+                                placeholder="Enter FechaDesincorporacion">
                         </div>
                     </form>
                 </div>
@@ -176,7 +180,7 @@
                         const row = document.createElement('tr');
                         row.innerHTML = `<td>${item.CodArticulo}</td><td>${item.Descripcion}</td><td>${item.Precio}</td>
                                          <td>${item.Existencia}</td><td>${item.Maximo}</td><td>${item.Minimo}</td>
-                                         <td>${item.StatusA}</td><td>${fechaDesincorporacion}</td>
+                                         <td>${item.CodLinea}</td><td>${item.StatusA}</td><td>${fechaDesincorporacion}</td>
                                          <td><button class="btn btn-primary edit-button">Editar</button>
                                          <button class="btn btn-danger delete-button" data-codarticulo="${item.CodArticulo}">Eliminar</button></td>`;
                         tableBody.appendChild(row);
@@ -242,21 +246,21 @@
 
     <script>
         //*****************GEt lineas
-        $(document).ready(function() {
-    $.ajax({
-        url: 'http://localhost:8000/getlineas',
-        type: 'GET',
-        success: function(data) {
-            const select = $('#CodLinea');
-            data.forEach(item => {
-                select.append(new Option(item.Descripcion, item.CodLinea));
+        $(document).ready(function () {
+            $.ajax({
+                url: 'http://localhost:8000/getlineas',
+                type: 'GET',
+                success: function (data) {
+                    const select = $('#CodLinea');
+                    data.forEach(item => {
+                        select.append(new Option(item.Descripcion, item.CodLinea));
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error: ' + textStatus + ' ' + errorThrown);
+                }
             });
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Error: ' + textStatus + ' ' + errorThrown);
-        }
-    });
-});
+        });
     </script>
 
     <script>
@@ -291,9 +295,10 @@
             var Existencia = $(this).closest('tr').find('td:nth-child(4)').text();
             var Maximo = $(this).closest('tr').find('td:nth-child(5)').text();
             var Minimo = $(this).closest('tr').find('td:nth-child(6)').text();
-            var StatusA = $(this).closest('tr').find('td:nth-child(7)').text();
-            var FechaDesincorporacion = $(this).closest('tr').find('td:nth-child(8)').text();
-        
+            var StatusA = $(this).closest('tr').find('td:nth-child(7)').text().trim() === 'true';
+            var FechaDesincorporacion = new Date($(this).closest('tr').find('td:nth-child(8)').text().trim());
+
+
             // Fill the modal with the article data
             $('#editModal #CodArticulo').val(CodArticulo);
             $('#editModal #Descripcion').val(Descripcion);
@@ -303,7 +308,7 @@
             $('#editModal #Minimo').val(Minimo);
             $('#editModal #StatusA').val(StatusA);
             $('#editModal #FechaDesincorporacion').val(FechaDesincorporacion);
-        
+
             // Show the modal
             $('#editModal').modal('show');
         });
@@ -318,7 +323,7 @@
             var Minimo = $('#editModal #Minimo').val();
             var StatusA = $('#editModal #StatusA').val();
             var FechaDesincorporacion = $('#editModal #FechaDesincorporacion').val();
-        
+
             $.ajax({
                 url: 'http://localhost:8000/updatearticulo',
                 method: 'POST',
