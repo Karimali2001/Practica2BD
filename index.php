@@ -106,6 +106,7 @@ $routes = [
     },
     '/updatelineas' => function () use ($conn) {
         $input = json_decode(file_get_contents('php://input'), true);
+        error_log(print_r($input, true)); // Log the entire input object
 
         if (!isset ($input['CodLinea']) || !isset ($input['DescripcionL'])) {
             http_response_code(400);
@@ -126,7 +127,6 @@ $routes = [
         http_response_code(200);
         echo json_encode(['message' => 'Linea updated successfully']);
     },
-
     '/getarticulos/(\d+)' => function ($CodLinea) use ($conn) {
         $tsql = "SELECT * FROM Articulos WHERE CodLinea = ?";
         $params = [$CodLinea];
@@ -195,12 +195,19 @@ $routes = [
     // PUT method to update an article
     '/updatearticulo' => function () use ($conn) {
         $request = json_decode(file_get_contents('php://input'), true);
+        error_log(print_r($request, true)); // Log the entire request object
+
         $CodArticulo = $request['CodArticulo'];
         $Descripcion = $request['Descripcion'];
-        // Add other fields as necessary
-    
-        $tsql = "UPDATE Articulos SET Descripcion = ? WHERE CodArticulo = ?";
-        $params = [$Descripcion, $CodArticulo];
+        $Precio = $request['Precio'];
+        $Existencia = $request['Existencia'];
+        $Maximo = $request['Maximo'];
+        $Minimo = $request['Minimo'];
+        $StatusA = $request['StatusA'];
+        $FechaDesincorporacion = $request['FechaDesincorporacion'];
+
+        $tsql = "UPDATE Articulos SET Descripcion = ?, Precio = ?, Existencia = ?, Maximo = ?, Minimo = ?, StatusA = ?, FechaDesincorporacion = ? WHERE CodArticulo = ?";
+        $params = [$Descripcion, $Precio, $Existencia, $Maximo, $Minimo, $StatusA, $FechaDesincorporacion, $CodArticulo];
         $getResults = sqlsrv_query($conn, $tsql, $params);
 
         if ($getResults == FALSE) {

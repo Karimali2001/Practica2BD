@@ -62,7 +62,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal para editar -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -104,6 +104,7 @@
             fetch('http://localhost:8000/getlineas')
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data);
                     data.forEach(item => {
                         const row = document.createElement('tr');
                         row.innerHTML = `<td>${item.CodLinea}</td><td>${item.DescripcionL}</td>
@@ -177,14 +178,17 @@
 
     <script>
         // ***********************EDIT LINEAS
+
+        var CodLinea;
+
         $(document).on('click', '.editButton', function () {
+            CodLinea = $(this).data('codlinea'); // Store the value of data-codlinea
             // Show the modal
             $('#editModal').modal('show');
         });
 
         $(document).on('click', '#editSaveButton', function () {
             var newDescripcionL = $('#editDescripcionL').val();
-            var CodLinea = $('.editButton').data('codlinea');
 
             $.ajax({
                 url: 'http://localhost:8000/updatelineas',

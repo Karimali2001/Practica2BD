@@ -130,10 +130,12 @@
                             <label for="Minimo">Minimo</label>
                             <input type="number" class="form-control" id="Minimo" placeholder="Enter Minimo">
                         </div>
-                        <div class="form-group">
-                            <label for="StatusA">StatusA</label>
-                            <input type="text" class="form-control" id="StatusA" placeholder="Enter StatusA">
-                        </div>
+                        <label for="StatusA">Estado</label>
+                        <select class="form-control" id="StatusA" required>
+                            <option value="A">A</option>
+                            <option value="D">D</option>
+                            <option value="R">R</option>
+                        </select>
                         <div class="form-group">
                             <label for="FechaDesincorporacion">FechaDesincorporacion</label>
                             <input type="date" class="form-control" id="FechaDesincorporacion" placeholder="Enter FechaDesincorporacion">
@@ -142,7 +144,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" id="saveButton">Guardar</button>
+                    <button type="button" class="btn btn-primary" id="editSaveButton">Guardar</button>
                 </div>
             </div>
         </div>
@@ -285,34 +287,56 @@
         $(document).on('click', '.edit-button', function () {
             var CodArticulo = $(this).closest('tr').find('td:first').text();
             var Descripcion = $(this).closest('tr').find('td:nth-child(2)').text();
-            // Add other fields as necessary
-
+            var Precio = $(this).closest('tr').find('td:nth-child(3)').text();
+            var Existencia = $(this).closest('tr').find('td:nth-child(4)').text();
+            var Maximo = $(this).closest('tr').find('td:nth-child(5)').text();
+            var Minimo = $(this).closest('tr').find('td:nth-child(6)').text();
+            var StatusA = $(this).closest('tr').find('td:nth-child(7)').text();
+            var FechaDesincorporacion = $(this).closest('tr').find('td:nth-child(8)').text();
+        
             // Fill the modal with the article data
             $('#editModal #CodArticulo').val(CodArticulo);
             $('#editModal #Descripcion').val(Descripcion);
-            // Add other fields as necessary
-
+            $('#editModal #Precio').val(Precio);
+            $('#editModal #Existencia').val(Existencia);
+            $('#editModal #Maximo').val(Maximo);
+            $('#editModal #Minimo').val(Minimo);
+            $('#editModal #StatusA').val(StatusA);
+            $('#editModal #FechaDesincorporacion').val(FechaDesincorporacion);
+        
             // Show the modal
             $('#editModal').modal('show');
         });
 
         // Send the update request when the save button in the modal is clicked
-        $('#editModal #saveButton').click(function () {
+        $(document).on('click', '#editSaveButton', function () {
             var CodArticulo = $('#editModal #CodArticulo').val();
             var Descripcion = $('#editModal #Descripcion').val();
-            // Add other fields as necessary
-
+            var Precio = $('#editModal #Precio').val();
+            var Existencia = $('#editModal #Existencia').val();
+            var Maximo = $('#editModal #Maximo').val();
+            var Minimo = $('#editModal #Minimo').val();
+            var StatusA = $('#editModal #StatusA').val();
+            var FechaDesincorporacion = $('#editModal #FechaDesincorporacion').val();
+        
             $.ajax({
                 url: 'http://localhost:8000/updatearticulo',
-                method: 'PUT',
-                data: JSON.stringify({ CodArticulo: CodArticulo, Descripcion: Descripcion }),
-                // Add other fields as necessary
+                method: 'POST',
+                data: JSON.stringify({
+                    CodArticulo: CodArticulo,
+                    Descripcion: Descripcion,
+                    Precio: Precio,
+                    Existencia: Existencia,
+                    Maximo: Maximo,
+                    Minimo: Minimo,
+                    StatusA: StatusA,
+                    FechaDesincorporacion: FechaDesincorporacion
+                }),
                 contentType: 'application/json',
                 success: function () {
                     alert('Articulo actualizado con éxito');
                     // Update the table
                     updateTable();
-                    // Close the modal
                     $('#editModal').modal('hide');
                 },
                 error: function () {
